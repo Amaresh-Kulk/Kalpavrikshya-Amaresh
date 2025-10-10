@@ -33,6 +33,19 @@ int checkAge(int age) {
   return 0;
 }
 
+int validName(char name[])  {
+  for(int i = 0;name[i] != '\n';i++) {
+    if(!isalpha(name[i])) return 0;
+  }
+
+  //First Letter Should be Capital
+  if(!isupper(name[0])) return 0;
+  for(int i = 1;name[i] != '\n';i++)  {
+    if(isupper(name[i]))  return 0;
+  }
+  return 1;
+}
+
 void createFile()  {
    FILE *fp = fopen("users.txt", "a+");
    User user;
