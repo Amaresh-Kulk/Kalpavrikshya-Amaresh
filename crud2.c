@@ -11,6 +11,7 @@ typedef struct User
 
 
 int checkID(int id)  {
+  if(id < 1)  return 1;
   FILE *fp = fopen("users.txt", "r");
   if(!fp) {
     printf("Unable to OPen File.");
@@ -61,14 +62,26 @@ void createFile()  {
     scanf("%d", &user.id);
    }while(checkID(user.id)); 
 
-   printf("\nEnter first name: ");
-   scanf("%s", user.fname);
+   do
+   {
+    printf("\nEnter first name: ");
+    scanf("%s", user.fname);
+   } while (!validName(user.fname));
+   
+   
+   do
+   {
+    printf("\nEnter middle name: ");
+    scanf("%s", user.mname);
+   } while (!validName(user.mname));
+   
 
-   printf("\nEnter middle name: ");
-   scanf("%s", user.mname);
-
-   printf("\nEnter last name: ");
+   do
+   {
+    printf("\nEnter last name: ");
    scanf("%s", user.lname);
+   } while (!validName(user.lname));
+   
 
    do
    {
@@ -107,24 +120,46 @@ void updateFile() {
     exit(0);
   }
   int id;
-  printf("\nEnter id of student to be updated: ");
-  scanf("%d", &id);
+  do
+  {
+    printf("\nEnter id of student to be updated: ");
+    scanf("%d", &id);
+  } while (checkID(id));
+  
+  
 
   int flag = 0;
 
   while(fscanf(fp, "%d %s %s %s %d\n", &user.id, user.fname, user.mname, user.lname, &user.age) != EOF)  {
     if(user.id == id) {
-      printf("\nUpdate first name: ");
-      scanf("%s", user.fname);
-
-      printf("\nUpdate middle name: ");
-      scanf("%s", user.mname);
-
-      printf("\nUpdate last name:");
-      scanf("%s", user.lname);
-
-      printf("\nUpdate Age: ");
-      scanf("%d", &user.age);
+      do
+      {
+        printf("\nUpdate first name: ");
+        scanf("%s", user.fname);
+      } while (!validName(user.fname));
+      
+      
+      do
+      {
+        printf("\nUpdate middle name: ");
+        scanf("%s", user.mname);
+      } while (!validName(user.mname));
+      
+      
+      do
+      {
+        printf("\nUpdate last name:");
+        scanf("%s", user.lname);
+      } while (!validName(user.lname));
+      
+      
+      do
+      {
+        printf("\nUpdate Age: ");
+        scanf("%d", &user.age);
+      } while (checkAge(user.age));
+      
+      
 
       flag = 1;
     }
@@ -154,8 +189,11 @@ void deleteFile() {
   User user;
 
   int id;
-  printf("Enter ID of user to be deleted: ");
-  scanf("%d", &id);
+  do  {
+    printf("Enter ID of user to be deleted: ");
+    scanf("%d", &id);
+  }while(checkID(id));
+
 
   int flag = 0;
 
@@ -187,7 +225,7 @@ int main()  {
     printf("\n 2 : Read All Users");
     printf("\n3 : update user:");
     printf("\n4: Delete user");
-    printf("\n5 : exxit");
+    printf("\n5 : exit");
 
     printf("\nEnter the choice: ");
     scanf("%d", &choice);
