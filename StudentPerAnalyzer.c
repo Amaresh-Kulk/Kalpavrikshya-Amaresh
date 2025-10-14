@@ -62,19 +62,42 @@ int validMarks(int marks) {
 
 
 char grading(float avg) {
-  if(avg >= 85) return 'A';
-  else if(avg >= 70)  return 'B';
-  else if(avg >= 50)  return 'C';
-  else if(avg >= 35) return 'D';
-  else return 'F';
+  int avgInt = avg;
+  switch(avgInt) {
+    case 85 ... 100: return 'A';
+    case 70 ... 84: return 'B';
+    case 50 ... 69: return 'C';
+    case 35 ... 49: return 'D';
+    default : return 'F'; 
+  }
+
+
+  // if(avg >= 85) return 'A';
+  // else if(avg >= 70)  return 'B';
+  // else if(avg >= 50)  return 'C';
+  // else if(avg >= 35) return 'D';
+  // else return 'F';
 }
 
 void printPattern(char grade) {
-  printf("");
-  if(grade == 'A')  printf("\nPerformance: *****");
-  else if(grade == 'B') printf("\nPerformance: ****");
-  else if(grade == 'C') printf("\nPerformance: ***");
-  else if(grade == 'D') printf("\nPerformance: **");
+  //printf("");
+  
+  switch(grade) {
+    case 'A': printf("\nPerformance: *****");
+              break;
+    case 'B': printf("\nPerformance: ****");
+              break;
+    case 'C': printf("\nPerformance: ***");
+              break;
+    case 'D': printf("\nPerformance: **");
+              break;
+  }
+
+
+  // if(grade == 'A')  printf("\nPerformance: *****");
+  // else if(grade == 'B') printf("\nPerformance: ****");
+  // else if(grade == 'C') printf("\nPerformance: ***");
+  // else if(grade == 'D') printf("\nPerformance: **");
 }
 
 int totalMarks(int sub1, int sub2, int sub3)  {
@@ -110,26 +133,26 @@ void rollNumbers(int rollNum[], int k, int i)  {
   // }
 }
 
-void takeInput(Student stud[], int n, int rollNum[]) {
-  for(int i = 0;i < n;i++)  {
-
-    do
+void getRollNumber(Student stud[], int i, int rollNum[], int n)  {
+  do
     {
       printf("\nEnter student roll number: ");
     scanf("%d", &stud[i].roll);
     }while (!validRollNum(stud[i].roll, rollNum, n));
-    
-    
-    do
+}
+
+void getName(Student stud[], int i) {
+  do
     {
       getchar();
       printf("\nEnter student name: ");
       // scanf("%s", );
       fgets (stud[i].name, 1000, stdin);
     } while (!validName(stud[i].name));
-    
-    
-    do
+}
+
+void getMarksForAllSubjects(Student stud[], int i)  {
+  do
     {
       printf("\nEnter marks for first subject: ");
       scanf("%d", &stud[i].sub1);
@@ -149,7 +172,16 @@ void takeInput(Student stud[], int n, int rollNum[]) {
       printf("\nEnter marks for third subject: ");
       scanf("%d", &stud[i].sub3);
     } while (!validMarks(stud[i].sub3));
+}
+
+void takeInput(Student stud[], int n, int rollNum[]) {
+  for(int i = 0;i < n;i++)  {
+
+    getRollNumber(stud, i, rollNum, n);
+
+    getName(stud, i);
     
+    getMarksForAllSubjects(stud, i);
     
     rollNum[i] = stud[i].roll;
   }
