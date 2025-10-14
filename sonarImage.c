@@ -11,6 +11,13 @@ int validInput(int a) {
   return 1;
 }
 
+void getValidInput(int n, int (*matrix)[n], int i, int j) {
+  do
+      {
+        scanf("%d", (*(matrix + i) + j));
+      } while (!validInput(*(*(matrix + i) + j)));
+}
+
 int validNValue(int n)  {
   if(n < 2 || n > 10) {
     printf("\nEnter value between 2 and 10: ");
@@ -24,10 +31,7 @@ void  takeInput(int n, int (*matrix)[n]) {
 
   for(int i = 0;i < n;i++)  {
     for(int j = 0;j < n;j++)  {
-      do
-      {
-        scanf("%d", (*(matrix + i) + j));
-      } while (!validInput(*(*(matrix + i) + j)));
+      getValidInput(n, matrix, i, j);
     }
   }
 }
@@ -71,8 +75,35 @@ void rotateMatrix(int n, int (*matrix)[n])  {
   printInput(n, matrix);
 }
 
-void filterMatrix(int n, int (*matrix)[n])  {
 
+void calculateFilter(int n, int (*matrix)[n], int i, int j) {
+  int count = 0, sum = 0;
+  for(int filterI = -1;filterI <= 1;filterI++)  {
+    for(int filterJ = -1;filterJ <= 1;filterJ++)  {
+      int k = i + filterI, m = j + filterJ;
+      if(k >= 0 && k < n && m >= 0 && m < n)  {
+        sum += *(*(matrix + k) + m) & 0xFF;
+        count++;
+      }
+    }
+  }
+
+  int res = sum / count;
+  *(*(matrix + i) + j) |= (res << 8);
+}
+void filterMatrix(int n, int (*matrix)[n])  {
+  for(int i = 0;i < n;i++)  {
+    for(int j = 0;j < n;j++)  {
+      calculateFilter(n, matrix, i, j);
+    }
+  }
+
+  //shifting bits to filtered value
+  for(int i = 0;i < n;i++)  {
+    for(int j = 0;j < n;j++)  {
+      *(*(matrix + i) + j) = *(*(matrix + i) + j) >> 8;
+    }
+  }
 }
 
 int main()  {
