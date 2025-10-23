@@ -3,7 +3,7 @@
 #include<ctype.h>
 #include<string.h>
 
-int validInput(int a) {
+int isValidRandomInput(int a) {
   if(a < 0 || a > 255)  {
     printf("\nEnter value between 0 and 255:");
     return 0;
@@ -15,7 +15,7 @@ void getValidInput(int n, int (*matrix)[n], int i, int j) {
   do
       {
         scanf("%d", (*(matrix + i) + j));
-      } while (!validInput(*(*(matrix + i) + j)));
+      } while (!isValidRandomInput(*(*(matrix + i) + j)));
 }
 
 int validNValue(int n)  {
