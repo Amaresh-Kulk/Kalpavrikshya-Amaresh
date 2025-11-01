@@ -165,7 +165,7 @@ void viewProducts(int n, Product *prod) {
         printf("\n----------------------------\n");
     }
 }
-
+//
 void printDetails(int id, char name[], float price, int quantity) {
     printf("\nProduct ID: %d", id);
     printf("\nProduct Name: %s", name);
