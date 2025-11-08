@@ -511,6 +511,25 @@ void parseString(char *str, char parse[3][1000]) {
   }
 }
 
+int getValidName(char *name)  {
+  if(name[0] == '\0') {
+    printf("\nName can not be empty.");
+    return 0;
+  }
+
+  if(strcmp(name, "cwd") == 0 || strcmp(name, "mkdir") == 0 || strcmp(name, "create") == 0 || strcmp(name, "write") == 0 || strcmp(name, "read") == 0 || strcmp(name, "pwd") == 0 || strcmp(name, "rmdir") == 0 || strcmp(name, "ls") == 0 || strcmp(name, "cd") == 0 || strcmp(name, "cd") == 0 || strcmp(name, "df") == 0 || strcmp(name, "exit") == 0) {
+    printf("\nCan't use reserved words.");
+    return 0;
+  }
+
+  if(strlen(name) > NAME_SIZE)  {
+    printf("\nName should be 30 characters long.");
+    return 0;
+  }
+
+  return 1;
+}
+
 int main()  {
   insertFreeBlockBeginning();
   addRootDirectory();
@@ -521,6 +540,7 @@ int main()  {
 
     char parse[3][1000];
     parseString(str, parse);
+    if(!getValidName(parse[1]))  continue;
 
     if(strcmp(parse[0], "mkdir") == 0)  mkdir(parse[1]);
     else if(strcmp(parse[0], "create") == 0)  create(parse[1]);
@@ -533,6 +553,9 @@ int main()  {
     else if(strcmp(parse[0], "pwd") == 0) pwd(currDir);
     else if(strcmp(parse[0], "df") == 0)  df();
     else if(strcmp(parse[0], "exit") == 0)  Exit();
+    else  {
+      printf("\n%s can't be recognised as a command", parse[0]);
+    }
   }
   
   return 0;
