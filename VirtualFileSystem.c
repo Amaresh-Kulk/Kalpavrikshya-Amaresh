@@ -74,7 +74,7 @@ void addRootDirectory()  {
   currDir = root;
 }
 
-char * cwd()  {
+char * curentWorkingDirectory()  {
   return currDir->name;
 }
 
@@ -95,7 +95,7 @@ fileNode * findChild(char name[50])  {
   return NULL;
 }
 
-void mkdir(char name[])  {
+void makeDirectory(char name[])  {
   if(findChild(name) != NULL)  {
     printf("\nThe directory with name %s exists already!", name);
     return;
@@ -251,7 +251,7 @@ void read(char name[])  {
   printf("\n");
 }
 
-void rmdir(char name[])  {
+void removeDirectory(char name[])  {
   if(strcmp(name, "/") == 0)  {
     printf("\nCan't delete root directory");
     return;
@@ -353,7 +353,7 @@ void delete(char name[])  {
   }
 }
 
-void ls() {
+void listFiles() {
   fileNode *temp = currDir->child;
   printf("\n");
   if(temp == NULL)  {
@@ -367,7 +367,7 @@ void ls() {
   } while (temp != currDir->child);
 }
 
-void cd(char name[50]) {
+void changeDirectory(char name[50]) {
   if(strcmp(name, "..") == 0) {
     if(currDir->parent == NULL) {
       printf("\nCan't exit from root");
@@ -396,7 +396,7 @@ void cd(char name[50]) {
   printf("\nCannot find the directory");
 }
 
-void pwd(fileNode *temp) {
+void presentWorkingDirectory(fileNode *temp) {
   if(strcmp(temp->name, "/") == 0) {
     return;
   } 
@@ -404,7 +404,7 @@ void pwd(fileNode *temp) {
   printf("/%s", temp->name);
 }
 
-void df() {
+void defineFile() {
   int count = 0;
   int usedBlocks = 0;
   float diskUsage = 0.0;
@@ -472,7 +472,7 @@ void freeFileNode(fileNode *temp) {
   free(temp);
 }
 
-void Exit() {
+void exitProgram() {
   freeFileNode(root);
   root = NULL;
 
@@ -534,7 +534,7 @@ int main()  {
   insertFreeBlockBeginning();
   addRootDirectory();
   while(1)  {
-    printf("\n%s > ", cwd());
+    printf("\n%s > ", currentWorkingDirectory());
     char str[10000];
     fgets(str, sizeof(str), stdin);
 
@@ -542,17 +542,17 @@ int main()  {
     parseString(str, parse);
     if(!getValidName(parse[1]))  continue;
 
-    if(strcmp(parse[0], "mkdir") == 0)  mkdir(parse[1]);
+    if(strcmp(parse[0], "mkdir") == 0)  makeDirectory(parse[1]);
     else if(strcmp(parse[0], "create") == 0)  create(parse[1]);
     else if(strcmp(parse[0], "write") == 0) write(parse[1], parse[2]);
     else if(strcmp(parse[0], "read") == 0)  read(parse[1]);
     else if(strcmp(parse[0], "delete") == 0)  delete(parse[1]);
-    else if(strcmp(parse[0], "rmdir") == 0) rmdir(parse[1]);
-    else if(strcmp(parse[0], "ls") == 0)  ls();
-    else if(strcmp(parse[0], "cd") == 0)  cd(parse[1]);
-    else if(strcmp(parse[0], "pwd") == 0) pwd(currDir);
-    else if(strcmp(parse[0], "df") == 0)  df();
-    else if(strcmp(parse[0], "exit") == 0)  Exit();
+    else if(strcmp(parse[0], "rmdir") == 0) removeDirectory(parse[1]);
+    else if(strcmp(parse[0], "ls") == 0)  listFiles();
+    else if(strcmp(parse[0], "cd") == 0)  changeDirectory(parse[1]);
+    else if(strcmp(parse[0], "pwd") == 0) presentWorkingDirectory(currDir);
+    else if(strcmp(parse[0], "df") == 0)  defineFile();
+    else if(strcmp(parse[0], "exit") == 0)  exitProgram();
     else  {
       printf("\n%s can't be recognised as a command", parse[0]);
     }
