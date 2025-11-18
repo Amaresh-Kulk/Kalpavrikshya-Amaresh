@@ -21,6 +21,8 @@
 //   Bowlers: (Wickets × 2) + (100 − EconomyRate)
 //   All-Rounders: [(BattingAverage × StrikeRate) / 100] + (Wickets × 2)
 
+int availableIDs[1000];
+
 void copyPlayerInfo(Player *p1, Player p2) {
     *p1 = p2;
 }
@@ -78,21 +80,32 @@ int searchID(Player p1[], int id, int n)  {
   return -1;
 }
 
-int checkValidID(int id)  {
+int checkInvalidID(int id)  {
   if(id < 1 || id > 1500) return 1;
   return 0;
+}
+
+
+void giveAvailableIDs()  {
+  printf("\nThe available IDs are: ");
+  for(int i = 1;i <= 1000;i++)  {
+    if(!availableIDs[i])  printf("%d ", i);
+  }
 }
 
 int getValidID(Player p1[], int n)  {
   int id, flag = 0;
   do
   {
-    if(flag)  printf("\nPlease enter and valid unique id\n");
+    if(flag)  {
+      printf("\nPlease enter and valid unique id\n");
+      giveAvailableIDs();
+    }
 
     printf("\nEnter Team ID to add player: ");
     scanf("%d", &id);
     flag = 1;
-  } while (searchID(p1, id, n) != -1 && checkValidID(id));
+  } while (searchID(p1, id, n) != -1 && checkInvalidID(id));
  return id; 
 }
 
@@ -103,7 +116,7 @@ void displayAll(Player p1[], int n) {
   }
 }
 
-int checkValidPlayerName(char name[])  {
+int checkInvalidPlayerName(char name[])  {
   for(int i = 0;name[i] != '\0';i++)  {
     if(name[i] == ' ')  continue;
     
@@ -134,11 +147,11 @@ void getValidPlayerName(char *name)  {
     name[strcspn(name, "\n")] = '\0';
 
 
-  } while (checkValidPlayerName(name));
+  } while (checkInvalidPlayerName(name));
   
 }
 
-int checkValidTeamName(char *teamName)  {
+int checkInvalidTeamName(char *teamName)  {
   for(int i = 0;i < teamCount;i++)  {
     if(strcmp(teams[i], teamName) == 0) return i;
   }
@@ -156,7 +169,7 @@ void getValidTeamName(char *team) {
     
     team[strcspn(team, "\n")] = '\0';
     flag = 1;
-  } while (checkValidTeamName(team) == -1);
+  } while (checkInvalidTeamName(team) == -1);
 }
 
 void getValidRole(char *role) {
@@ -174,7 +187,7 @@ void getValidRole(char *role) {
   }
 }
 
-int checkValidTotalRuns(int runs) {
+int checkInvalidTotalRuns(int runs) {
   if(runs < 0)  return 1;
   return 0;
 }
@@ -190,11 +203,11 @@ int getValidTotalRuns() {
     scanf("%d", &runs);
 
     flag = 1;
-  } while (checkValidTotalRuns(runs));
+  } while (checkInvalidTotalRuns(runs));
   return runs;
 }
 
-int checkValidAVG(float avg)  {
+int checkInvalidAVG(float avg)  {
   if(avg < 0) return 1;
   return 0;
 }
@@ -211,12 +224,12 @@ float getValidBattingAVG()  {
     scanf("%f", &avg);
 
     flag = 1;
-  } while (checkValidAVG(avg));
+  } while (checkInvalidAVG(avg));
   
   return avg;
 }
 
-int checkValidStrikeRate(float rate)  {
+int checkInvalidStrikeRate(float rate)  {
   if(rate < 0)  return 1;
   return 0;
 }
@@ -233,12 +246,12 @@ float getValidStrikeRate()  {
     scanf("%f", &rate);
 
     flag = 1;
-  } while (checkValidStrikeRate(rate));
+  } while (checkInvalidStrikeRate(rate));
   
   return rate;
 }
 
-int checkValidWickets(int wicket) {
+int checkInvalidWickets(int wicket) {
   if(wicket < 0)  return 1;
   return 0;
 }
@@ -254,7 +267,7 @@ int getValidWickets() {
     scanf("%d", &wicket);
 
     flag = 1;
-  } while (checkValidWickets(wicket));
+  } while (checkInvalidWickets(wicket));
   
   return wicket;
 }
@@ -298,6 +311,11 @@ void addPlayer(Player **p1, int *n)  {
   copyPlayerInfo(&((*p1)[*n]), newPlayer);
   *n = *n + 1;
   //displayAll(*p1, *n);
+  free(name);
+  free(team);
+  free(role);
+
+  availableIDs[newPlayer.id] = 1;
 }
 
 void mergeSortByTeamName(Player p1[], int l, int m, int r) {
@@ -691,6 +709,7 @@ int main()  {
   
   for(int i = 0;i < playerCount;i++)  {
     copyPlayerInfo(&p1[i], players[i]);
+    availableIDs[p1[i].id] = 1;
   }
 
   int numPlayers = playerCount;
