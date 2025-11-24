@@ -35,7 +35,9 @@ void initializeHash() {
   }
 }
 
+
 int hashCode(int key) {
+  if(key < 0) key = -key;
   return key % hash;
 }
 
